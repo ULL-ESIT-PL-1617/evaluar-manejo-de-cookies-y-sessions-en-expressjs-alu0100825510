@@ -3,7 +3,7 @@ var app = express();
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var fs = require('fs');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcrypt-nodejs');
 var salt = bcrypt.genSaltSync(10);
 var bodyParser = require('body-parser');
 
