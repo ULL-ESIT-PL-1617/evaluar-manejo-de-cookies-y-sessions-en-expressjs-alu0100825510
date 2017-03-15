@@ -110,7 +110,6 @@ app.get('/logout', function(req,res){
 
 
 
-
-
-app.listen(8080);
-console.log("Server de sessions y autenticación escuchando por el puerto 8080");
+var port = process.env.PORT || 8080;
+app.listen(port);
+console.log("Server de sessions y autenticación escuchando por el puerto " + port);
