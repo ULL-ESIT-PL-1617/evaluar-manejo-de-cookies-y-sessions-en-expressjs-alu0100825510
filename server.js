@@ -8,6 +8,7 @@ var salt = bcrypt.genSaltSync(10);
 var bodyParser = require('body-parser');
 
 var file = './users.json'; //archivo donde se guardan los usuarios
+if (!fs.existsSync(file)) fs.writeFileSync('./users.json', '[]');
 
 app.set('views', './views'); //Configuramos el directorio de vistas
 app.set('view engine', 'ejs');
@@ -22,33 +23,21 @@ app.use(session({
     saveUninitialized: true
 }));
 
-//Funcion de autenticación, si existe nombre y password en la sesión, se puede ver el contenido
+// Funcion de autenticación, si existe nombre y password en la sesión, se puede ver el contenido
 var auth = function(req, res, next) {
-
-      if(req.session && req.session.username && req.session.password){
-        return next();
-      }
-      else{
-      return res.sendStatus(401);
-      }
+    if(req.session && req.session.username && req.session.password){
+      return next();
+    }
+    else { // https://developer.mozilla.org/es/docs/Web/HTTP/Status/401 
+      return res.sendStatus(401); // 401: falta autenticación para el recurso solicitado.
+    }
   };
 
 //Ruta estática para ver el contenido, se necesita haber iniciado previamente sesion
 app.use('/content', auth, express.static('./gh-pages'));
 
-//Instrucciones ////////////////////////////////////////////////////////////////
-var instrucciones = `
-Visita los siguientes enlaces para ver el contenido, loguearte, cerrar sesión o registrarte:
-<ul>
-  <li> <a href="http://localhost:8080/content">localhost:8080/content</a> </li>
-  <li> <a href="http://localhost:8080/login">localhost:8080/login</a> </li>
-  <li> <a href="http://localhost:8080/logout">localhost:8080/logout</a> </li>
-  <li> <a href="http://localhost:8080/register">localhost:8080/register</a> </li>
-</ul>
-`;
-
 app.get('/', function(req,res){
-  res.send(instrucciones);
+  res.render('index');
 });
 
 
