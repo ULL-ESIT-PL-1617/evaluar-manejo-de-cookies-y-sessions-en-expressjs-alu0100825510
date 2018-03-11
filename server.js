@@ -92,12 +92,17 @@ app.get('/register', function (req, res) {
 
 app.post('/register', function (req, res) {
 
-    var configFile = fs.readFileSync(file);
-    var config = JSON.parse(configFile);
-    config.push({"username" : req.body.username, "password" : bcrypt.hashSync(req.body.password, salt) });
-    var configJSON = JSON.stringify(config);
-    fs.writeFileSync(file, configJSON);
-    res.render('registrado', {username:req.body.username});
+  var configFile = fs.readFileSync(file);
+  var config = JSON.parse(configFile);
+  var index = config.findIndex((i) => {
+    return  (i.username == req.body.username)
+  });
+  var newUser = {"username" : req.body.username, "password" : bcrypt.hashSync(req.body.password, salt) };
+  if (index == -1) config.push(newUser);
+  else config[index] =  newUser;
+  var configJSON = JSON.stringify(config);
+  fs.writeFileSync(file, configJSON);
+  res.render('registrado', {username:req.body.username});
 
 });
 
