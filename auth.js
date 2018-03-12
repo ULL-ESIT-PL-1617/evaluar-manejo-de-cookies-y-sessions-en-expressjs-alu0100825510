@@ -5,7 +5,9 @@ const express = require('express');
 var router = express.Router();
 
 module.exports = function(options) {
-  const {passwordFile, pathToProtect} = options;
+  const {passwordFile, pathToProtect,
+    loginView
+  } = options;
   if (!fs.existsSync(passwordFile)) fs.writeFileSync(passwordFile, '[]');
 
   // Funcion de autenticación, si existe nombre y password en la sesión, se puede ver el contenido
@@ -26,7 +28,7 @@ module.exports = function(options) {
   //Fase de login ////////////////////////////////////////////////////////////////
   router.get('/login', function (req, res) {
     if ( (!req.session.username)) {
-      res.render('formulariologin');
+      res.render(loginView);
     }
     else if ((req.session.username)) {
       res.render('logincompleto', {username:req.session.username});

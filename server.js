@@ -19,8 +19,9 @@ app.use(session({
     saveUninitialized: true
 }));
 
-app.use('/', auth({ passwordFile: './users.json', 
-                    pathToProtect: './gh-pages'
+app.use('/', auth({ passwordFile: './users.json',
+                    pathToProtect: './gh-pages',
+                    loginView: 'formulariologin'
 }));
 
 app.get('/', function(req,res){
