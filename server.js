@@ -57,16 +57,17 @@ app.post('/login', function(req,res){
   var configFile = fs.readFileSync(file);
   var config = JSON.parse(configFile);
 
-  for(var i=0; i<config.length; i++){
-    if(req.session && (req.body.username == config[i].username )&& (bcrypt.compareSync(req.body.password, config[i].password))){
+  let u = config.find((user) => user.username == req.body.username);
+  if (u !== -1) {
+    if ((req.session) && (bcrypt.compareSync(req.body.password, u.password))){
       req.session.username = req.body.username;
       req.session.password = req.body.password;
       req.session.admin = true;
       return res.render('logincompleto', {username:req.session.username});
-    } //Ponemos return para evitar tratar de enviar dos veces, por lo que se sale de la función cuando sea necesario
+    } 
   }
+  else
    return res.render('errorlogin');
-
 })
 
 //Fase de registro /////////////////////////////////////////////////////////////
@@ -88,7 +89,7 @@ app.post('/register', function (req, res) {
   });
   var newUser = {"username" : req.body.username, "password" : bcrypt.hashSync(req.body.password, salt) };
   if (index == -1) config.push(newUser);
-  else config[index] =  newUser;
+  else return res.render('errorregister', newUser);
   var configJSON = JSON.stringify(config);
   fs.writeFileSync(file, configJSON);
   res.render('registrado', {username:req.body.username});
@@ -98,7 +99,7 @@ app.post('/register', function (req, res) {
 //Cerrar sesion ////////////////////////////////////////////////////////////////
 app.get('/logout', function(req,res){
   req.session.destroy();
-  res.send("logout success!");
+  res.send('logout success! <br/> <a href="/">volver</a>');
 
 });
 
