@@ -1,3 +1,4 @@
+var ip = require("ip");
 var express = require('express');
 var app = express();
 var session = require('express-session');
@@ -103,8 +104,12 @@ app.get('/logout', function(req,res){
 
 });
 
+// listen on all addresses
+var server = app.listen(8080, '0.0.0.0', function () {
 
+  var host = server.address().address
+  var port = server.address().port
 
-var port = process.env.PORT || 8080;
-app.listen(port);
-console.log("Server de sessions y autenticación escuchando por el puerto " + port);
+  console.log('Server with sessions and auth listening at http://%s:%s my ip = %s', host, port, ip.address())
+
+})
