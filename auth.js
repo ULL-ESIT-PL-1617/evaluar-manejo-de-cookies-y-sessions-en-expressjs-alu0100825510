@@ -48,6 +48,8 @@ module.exports = function(passwordFile, pathToProtect) {
         req.session.admin = true;
         return res.render('logincompleto', {username:req.session.username});
       } 
+      else
+       return res.render('errorlogin');
     }
     else
      return res.render('errorlogin');
