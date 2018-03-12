@@ -6,7 +6,8 @@ var router = express.Router();
 
 module.exports = function(options) {
   const {passwordFile, pathToProtect,
-    loginView
+    loginView,
+    fullLoginView
   } = options;
   if (!fs.existsSync(passwordFile)) fs.writeFileSync(passwordFile, '[]');
 
@@ -31,7 +32,7 @@ module.exports = function(options) {
       res.render(loginView);
     }
     else if ((req.session.username)) {
-      res.render('logincompleto', {username:req.session.username});
+      res.render(fullLoginView, {username:req.session.username});
     }
   });
 
@@ -45,7 +46,7 @@ module.exports = function(options) {
         req.session.username = req.body.username;
         req.session.password = req.body.password;
         req.session.admin = true;
-        return res.render('logincompleto', {username:req.session.username});
+        return res.render(fullLoginView, {username:req.session.username});
       } 
       else
        return res.render('errorlogin');
@@ -60,7 +61,7 @@ module.exports = function(options) {
       res.render('formularioregistro');
     }
     else{
-      res.render('logincompleto', {username:req.session.username});
+      res.render(fullLoginView, {username:req.session.username});
     }
   });
 

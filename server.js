@@ -21,7 +21,8 @@ app.use(session({
 
 app.use('/', auth({ passwordFile: './users.json',
                     pathToProtect: './gh-pages',
-                    loginView: 'formulariologin'
+                    loginView: 'formulariologin',
+                    fullLoginView: 'logincompleto'
 }));
 
 app.get('/', function(req,res){
