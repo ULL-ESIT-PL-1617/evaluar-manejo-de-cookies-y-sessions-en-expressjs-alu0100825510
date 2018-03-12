@@ -4,8 +4,9 @@ var salt = bcrypt.genSaltSync(10);
 const express = require('express');
 var router = express.Router();
 
-module.exports = function(passwordFile, pathToProtect) {
-  if (!fs.existsSync(passwordFile)) fs.writeFileSync('./users.json', '[]');
+module.exports = function(options) {
+  const {passwordFile, pathToProtect} = options;
+  if (!fs.existsSync(passwordFile)) fs.writeFileSync(passwordFile, '[]');
 
   // Funcion de autenticación, si existe nombre y password en la sesión, se puede ver el contenido
   var auth = function(req, res, next) {
@@ -21,10 +22,6 @@ module.exports = function(passwordFile, pathToProtect) {
   router.use('/content', 
     auth, // middleware!
     express.static(pathToProtect));
-
-  router.get('/', function(req,res){
-    res.render('index');
-  });
 
   //Fase de login ////////////////////////////////////////////////////////////////
   router.get('/login', function (req, res) {

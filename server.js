@@ -19,7 +19,13 @@ app.use(session({
     saveUninitialized: true
 }));
 
-app.use('/', auth('./users.json', './gh-pages'));
+app.use('/', auth({ passwordFile: './users.json', 
+                    pathToProtect: './gh-pages'
+}));
+
+app.get('/', function(req,res){
+  res.render('index');
+});
 
 // listen on all addresses
 var server = app.listen(8080, '0.0.0.0', function () {
