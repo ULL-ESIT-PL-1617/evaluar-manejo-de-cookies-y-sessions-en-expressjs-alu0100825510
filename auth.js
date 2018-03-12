@@ -63,15 +63,16 @@ module.exports = function(options) {
   });
 
   router.post('/register', function (req, res) {
-
     var configFile = fs.readFileSync(passwordFile);
     var config = JSON.parse(configFile);
     var index = config.findIndex((i) => {
       return  (i.username == req.body.username);
     });
     var newUser = {"username" : req.body.username, "password" : bcrypt.hashSync(req.body.password, salt) };
+
     if (index == -1) config.push(newUser);
     else return res.render('errorregister', newUser);
+
     var configJSON = JSON.stringify(config);
     fs.writeFileSync(passwordFile, configJSON);
     res.render('registrado', {username:req.body.username});
@@ -80,8 +81,9 @@ module.exports = function(options) {
 
   //Cerrar sesion ////////////////////////////////////////////////////////////////
   router.get('/logout', function(req,res){
+    let user = req.session.username;
     req.session.destroy();
-    res.send('logout success! <br/> <a href="/">volver</a>');
+    res.render('logout', { user});
 
   });
   return router;
