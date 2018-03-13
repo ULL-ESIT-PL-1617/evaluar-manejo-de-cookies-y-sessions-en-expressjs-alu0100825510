@@ -1,10 +1,10 @@
-var ip = require("ip");
-var express = require('express');
-var app = express();
-var session = require('express-session');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var auth = require('./auth.js');
+const ip = require("ip");
+const express = require('express');
+const app = express();
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const auth = require('./auth.js');
 
 app.set('views', './views'); //Configuramos el directorio de vistas
 app.set('view engine', 'ejs');
@@ -30,10 +30,10 @@ app.get('/', function(req,res){
 });
 
 // listen on all addresses
-var server = app.listen(8080, '0.0.0.0', function () {
+const server = app.listen(8080, '0.0.0.0', function () {
 
-  var host = server.address().address
-  var port = server.address().port
+  const host = server.address().address
+  const port = server.address().port
 
   console.log('Server with sessions and auth listening at http://%s:%s my ip = %s', host, port, ip.address())
 

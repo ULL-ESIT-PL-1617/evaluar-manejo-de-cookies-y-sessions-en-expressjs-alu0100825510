@@ -1,18 +1,20 @@
-var fs = require('fs');
-var bcrypt = require('bcrypt-nodejs');
-var salt = bcrypt.genSaltSync(10);
+const fs = require('fs');
+const bcrypt = require('bcrypt-nodejs');
+const salt = bcrypt.genSaltSync(10);
 const express = require('express');
-var router = express.Router();
+const router = express.Router();
 
 module.exports = function(options) {
-  const {passwordFile, pathToProtect,
+  const {
+    passwordFile, 
+    pathToProtect,
     loginView,
     fullLoginView
   } = options;
   if (!fs.existsSync(passwordFile)) fs.writeFileSync(passwordFile, '[]');
 
   // Funcion de autenticación, si existe nombre y password en la sesión, se puede ver el contenido
-  var auth = function(req, res, next) {
+  const auth = function(req, res, next) {
       if(req.session && req.session.username && req.session.password){
         return next();
       }
@@ -37,8 +39,8 @@ module.exports = function(options) {
   });
 
   router.post('/login', function(req,res){
-    var configFile = fs.readFileSync(passwordFile);
-    var config = JSON.parse(configFile);
+    let configFile = fs.readFileSync(passwordFile);
+    let config = JSON.parse(configFile);
 
     let u = config.find((user) => user.username == req.body.username);
     if (u && (u !== -1)) {
@@ -66,17 +68,17 @@ module.exports = function(options) {
   });
 
   router.post('/register', function (req, res) {
-    var configFile = fs.readFileSync(passwordFile);
-    var config = JSON.parse(configFile);
-    var index = config.findIndex((i) => {
+    let configFile = fs.readFileSync(passwordFile);
+    let config = JSON.parse(configFile);
+    let index = config.findIndex((i) => {
       return  (i.username == req.body.username);
     });
-    var newUser = {"username" : req.body.username, "password" : bcrypt.hashSync(req.body.password, salt) };
+    let newUser = {"username" : req.body.username, "password" : bcrypt.hashSync(req.body.password, salt) };
 
     if (index == -1) config.push(newUser);
     else return res.render('errorregister', newUser);
 
-    var configJSON = JSON.stringify(config);
+    let configJSON = JSON.stringify(config);
     fs.writeFileSync(passwordFile, configJSON);
     res.render('registrado', {username:req.body.username});
 
