@@ -1,6 +1,12 @@
 <html>
 <body>
 <h2> Formulario de registro </h2>
+  <%= 
+    /* About action="" below: See 
+      https://stackoverflow.com/questions/1131781/is-it-a-good-practice-to-use-an-empty-url-for-a-html-forms-action-attribute-a 
+      The best thing you can do is leave out the action attribute altogether. If you leave it out, the form will be submitted to the document's address, i.e. the same page.
+    */
+  %>
   <form method="POST" action="">
     <span> Usuario: </span><input name="username" autofocus> 
     <span> Contraseña: </span><input type="password" name="password">

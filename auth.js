@@ -79,7 +79,7 @@ module.exports = function(options) {
     let p = config[req.body.username];
 
     if (!p) config[req.body.username] = bcrypt.hashSync(req.body.password, salt);
-    else return res.render(errorRegisterView, newUser);
+    else return res.render(errorRegisterView, req.body.username);
 
     let configJSON = JSON.stringify(config);
     fs.writeFileSync(passwordFile, configJSON);
