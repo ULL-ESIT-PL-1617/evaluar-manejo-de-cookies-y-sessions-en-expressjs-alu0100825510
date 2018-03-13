@@ -12,7 +12,7 @@ module.exports = function(options) {
     fullLoginView,
     logoutView
   } = options;
-  if (!fs.existsSync(passwordFile)) fs.writeFileSync(passwordFile, '[]');
+  if (!fs.existsSync(passwordFile)) fs.writeFileSync(passwordFile, '{}');
 
   // Funcion de autenticación, si existe nombre y password en la sesión, se puede ver el contenido
   const auth = function(req, res, next) {
@@ -44,9 +44,9 @@ module.exports = function(options) {
     let configFile = fs.readFileSync(passwordFile);
     let config = JSON.parse(configFile);
 
-    let u = config.find((user) => user.username == req.body.username);
-    if (u && (u !== -1)) {
-      if ((req.session) && req.body && req.body.password && (bcrypt.compareSync(req.body.password, u.password))){
+    let p = config[req.body.username];
+    if (p) {
+      if ((req.session) && req.body && req.body.password && (bcrypt.compareSync(req.body.password, p))){
         req.session.username = req.body.username;
         req.session.password = req.body.password;
         req.session.admin = true;
@@ -72,12 +72,10 @@ module.exports = function(options) {
   router.post('/register', function (req, res) {
     let configFile = fs.readFileSync(passwordFile);
     let config = JSON.parse(configFile);
-    let index = config.findIndex((i) => {
-      return  (i.username == req.body.username);
-    });
+    let p = config[req.body.username];
     let newUser = {"username" : req.body.username, "password" : bcrypt.hashSync(req.body.password, salt) };
 
-    if (index == -1) config.push(newUser);
+    if (!p) config[newUser.username] = newUser.password;
     else return res.render('errorregister', newUser);
 
     let configJSON = JSON.stringify(config);
