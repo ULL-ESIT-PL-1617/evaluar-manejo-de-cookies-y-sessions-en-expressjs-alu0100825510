@@ -23,7 +23,11 @@ app.use('/', auth({ passwordFile: './users.json',
                     pathToProtect: './gh-pages',
                     loginView: 'formulariologin',
                     fullLoginView: 'logincompleto',
-                    logoutView: 'logout'
+                    logoutView: 'logout',
+                    errorLoginView: 'errorlogin',
+                    registerFormView: 'formularioregistro',
+                    errorRegisterView: 'errorregister',
+                    registeredView: 'registrado',
 }));
 
 app.get('/', function(req,res){

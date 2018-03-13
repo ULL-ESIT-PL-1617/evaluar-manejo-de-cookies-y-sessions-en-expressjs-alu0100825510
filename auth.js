@@ -10,7 +10,11 @@ module.exports = function(options) {
     pathToProtect,
     loginView,
     fullLoginView,
-    logoutView
+    logoutView,
+    errorLoginView,
+    registerFormView,
+    errorRegisterView,
+    registeredView
   } = options;
   if (!fs.existsSync(passwordFile)) fs.writeFileSync(passwordFile, '{}');
 
@@ -53,16 +57,16 @@ module.exports = function(options) {
         return res.render(fullLoginView, {username:req.session.username});
       } 
       else
-       return res.render('errorlogin');
+       return res.render(errorLoginView);
     }
     else
-     return res.render('errorlogin');
+     return res.render(errorLoginView);
   });
 
   //Fase de registro /////////////////////////////////////////////////////////////
   router.get('/register', function (req, res) {
     if ((!req.session.username)) {
-      res.render('formularioregistro');
+      res.render(registerFormView);
     }
     else{
       res.render(fullLoginView, {username:req.session.username});
@@ -75,11 +79,11 @@ module.exports = function(options) {
     let p = config[req.body.username];
 
     if (!p) config[req.body.username] = bcrypt.hashSync(req.body.password, salt);
-    else return res.render('errorregister', newUser);
+    else return res.render(errorRegisterView, newUser);
 
     let configJSON = JSON.stringify(config);
     fs.writeFileSync(passwordFile, configJSON);
-    res.render('registrado', {username:req.body.username});
+    res.render(registeredView, {username:req.body.username});
 
   });
 
