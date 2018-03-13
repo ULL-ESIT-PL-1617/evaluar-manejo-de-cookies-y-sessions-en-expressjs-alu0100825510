@@ -33,9 +33,9 @@ app.get('/', function(req,res){
 // listen on all addresses
 const server = app.listen(8080, '0.0.0.0', function () {
 
-  const host = server.address().address
-  const port = server.address().port
+  const host = server.address().address;
+  const port = server.address().port;
 
-  console.log('Server with sessions and auth listening at http://%s:%s my ip = %s', host, port, ip.address())
+  console.log('Server with sessions and auth listening at http://%s:%s my ip = %s', host, port, ip.address());
 
-})
+});
