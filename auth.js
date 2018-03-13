@@ -73,9 +73,8 @@ module.exports = function(options) {
     let configFile = fs.readFileSync(passwordFile);
     let config = JSON.parse(configFile);
     let p = config[req.body.username];
-    let newUser = {"username" : req.body.username, "password" : bcrypt.hashSync(req.body.password, salt) };
 
-    if (!p) config[newUser.username] = newUser.password;
+    if (!p) config[req.body.username] = bcrypt.hashSync(req.body.password, salt);
     else return res.render('errorregister', newUser);
 
     let configJSON = JSON.stringify(config);
