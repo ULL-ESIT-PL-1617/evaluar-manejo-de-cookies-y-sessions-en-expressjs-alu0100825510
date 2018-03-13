@@ -9,7 +9,8 @@ module.exports = function(options) {
     passwordFile, 
     pathToProtect,
     loginView,
-    fullLoginView
+    fullLoginView,
+    logoutView
   } = options;
   if (!fs.existsSync(passwordFile)) fs.writeFileSync(passwordFile, '[]');
 
@@ -25,8 +26,9 @@ module.exports = function(options) {
 
   //Ruta estática para ver el contenido, se necesita haber iniciado previamente sesion
   router.use('/content', 
-    auth, // middleware!
-    express.static(pathToProtect));
+    auth, // our middleware!
+    express.static(pathToProtect)
+  );
 
   //Fase de login ////////////////////////////////////////////////////////////////
   router.get('/login', function (req, res) {
@@ -88,7 +90,7 @@ module.exports = function(options) {
   router.get('/logout', function(req,res){
     let user = req.session.username;
     req.session.destroy();
-    res.render('logout', { user});
+    res.render(logoutView, { user});
 
   });
   return router;
